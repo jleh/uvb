@@ -37,5 +37,3 @@ Start both server and front with
 npm run dev:server
 npm run dev
 ```
-
-TODO: Fix: After login FB redirects to local server, not to webpack dev server port.

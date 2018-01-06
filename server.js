@@ -11,7 +11,7 @@ const users = require('./src/backend/users');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const FB_CALLBACK_LOCAL = 'http://localhost:3000/api/loginSuccess';
+const FB_CALLBACK_LOCAL = process.env.FB_LOGIN_CALLBACK || 'http://localhost:3000/api/loginSuccess';
 const FB_CALLBACK_PRODUCTION = 'https://uvb18.herokuapp.com/api/loginSuccess';
 
 passport.use(new Strategy({
