@@ -1,0 +1,103 @@
+body {
+  font-family: helvetica;
+}
+
+h1 {
+  font-family: helvetica;
+  font-weight: 200;
+}
+
+.pointCardName {
+  width: 10em;
+}
+
+.pointCardName.current {
+  font-weight: bold;
+}
+
+.modal.closed {
+  display: none;
+}
+
+.modal.open {
+  display: block;
+}
+
+.modal {
+  position: absolute;
+  background-color: #fff;
+  width: 100%;
+  top: 0;
+  height: 100%;
+}
+
+.modalContent {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  height: 50%;
+  transform: translateY(50%);
+}
+
+.pointTable {
+  border-collapse: collapse;
+  width: 100%
+}
+
+.pointCardRow td {
+  border-bottom: 1px solid #000;
+  padding-top: 0.5em;
+}
+
+.totalRow td {
+  padding-top: 0.5em;
+  font-weight: bold;
+}
+
+.totalCell {
+  text-align: right;
+  padding-right: 4em;
+}
+
+.drinkButtons button {
+  width: 100%;
+  border-bottom: 1px solid #000;
+}
+
+.inputButtons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.inputButtons div {
+  margin: 3px;
+}
+
+.loginMessage {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  top: 7em;
+  position: relative;
+}
+
+.confirm-buttons {
+  margin-top: 1em;
+}
+
+.container {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.error {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  font-size: 1.25em;
+  font-weight: bold;
+  color: red;
+}
+
+.scoreboard {
+  width: 100%;
+}
