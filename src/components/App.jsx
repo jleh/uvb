@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import axios from 'axios';
 
 import InputForm from './InputForm';
 import PointCard from './PointCard';
@@ -28,10 +29,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('api/venues')
-      .then(res => res.json())
-      .then((json) => {
-        this.setState({ venues: json.venues });
+    axios('api/venues')
+      .then((res) => {
+        this.setState({ venues: res.data.venues });
         this.setCurrentVenue();
       });
 
@@ -42,7 +42,7 @@ class App extends Component {
   setCurrentVenue() {
     const now = moment();
     const venues = this.state.venues.filter(venue => now.isAfter(moment(venue.time, 'HH:mm')));
-    const currentVenue = venues[venues.length - 1] || {};
+    const currentVenue = venues[venues.length - 1] || { name: '', time: '' };
 
     if (currentVenue !== this.state.currentVenue) {
       this.setState({ currentVenue });
@@ -52,21 +52,14 @@ class App extends Component {
   }
 
   getScores() {
-    fetch('/api/scores', { credentials: 'include' })
-      .then(res => res.json())
-      .then(scores => this.setState({ scores }));
+    axios('/api/scores')
+      .then(res => this.setState({ scores: res.data }));
 
     setTimeout(this.getScores, 60000);
   }
 
   checkLogin() {
-    fetch('/api/user', { credentials: 'include' })
-      .then((res) => {
-        if (!res.ok) {
-          throw res;
-        }
-        return res.json();
-      })
+    axios('/api/user')
       .then(() => this.loggedIn())
       .catch(() => this.setState({ showLogin: true }));
 
@@ -79,16 +72,8 @@ class App extends Component {
 
   addPoints(venue, points) {
     this.setState({ page: 'frontPage' });
-    fetch('/api/points', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ venue, points }),
-      credentials: 'include'
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw res;
-        }
+    axios.post('/api/points', { venue, points })
+      .then(() => {
         this.updatePoints();
         this.getScores();
       })
@@ -96,9 +81,8 @@ class App extends Component {
   }
 
   updatePoints() {
-    fetch('/api/points', { credentials: 'include' })
-      .then(res => res.json())
-      .then(userPoints => this.setState({ userPoints }))
+    axios('/api/points')
+      .then(res => this.setState({ userPoints: res.data }))
       .catch(() => this.setState({ error: true }));
   }
 
@@ -125,7 +109,7 @@ class App extends Component {
       content = (
         <InputForm
           addPoints={this.addPoints}
-          currentVenue={this.state.currentVenue}
+          currentVenue={this.state.currentVenue.name}
           venues={this.state.venues}
         />
       );
