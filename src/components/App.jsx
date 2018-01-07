@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { func } from 'prop-types';
 import moment from 'moment';
-import axios from 'axios';
 
 import InputForm from './InputForm';
 import PointCard from './PointCard';
@@ -29,9 +29,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios('api/venues')
-      .then((res) => {
-        this.setState({ venues: res.data.venues });
+    this.props.getVenues()
+      .then((venues) => {
+        this.setState({ venues });
         this.setCurrentVenue();
       });
 
@@ -52,14 +52,12 @@ class App extends Component {
   }
 
   getScores() {
-    axios('/api/scores')
-      .then(res => this.setState({ scores: res.data }));
-
+    this.props.getScores().then(scores => this.setState({ scores }));
     setTimeout(this.getScores, 60000);
   }
 
   checkLogin() {
-    axios('/api/user')
+    this.props.getUser()
       .then(() => this.loggedIn())
       .catch(() => this.setState({ showLogin: true }));
 
@@ -72,7 +70,7 @@ class App extends Component {
 
   addPoints(venue, points) {
     this.setState({ page: 'frontPage' });
-    axios.post('/api/points', { venue, points })
+    this.props.updatePoints(venue, points)
       .then(() => {
         this.updatePoints();
         this.getScores();
@@ -81,8 +79,8 @@ class App extends Component {
   }
 
   updatePoints() {
-    axios('/api/points')
-      .then(res => this.setState({ userPoints: res.data }))
+    this.props.getPoints()
+      .then(userPoints => this.setState({ userPoints }))
       .catch(() => this.setState({ error: true }));
   }
 
@@ -129,5 +127,13 @@ class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  getVenues: func.isRequired,
+  getScores: func.isRequired,
+  getUser: func.isRequired,
+  getPoints: func.isRequired,
+  updatePoints: func.isRequired
+};
 
 export default App;
