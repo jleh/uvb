@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { func, string } from 'prop-types';
-import { venuesType } from '../types';
+import { func } from 'prop-types';
+import { venuesType, venueType } from '../types';
 
 class InputForm extends Component {
   constructor(props) {
@@ -86,7 +86,7 @@ class InputForm extends Component {
 }
 
 InputForm.propTypes = {
-  currentVenue: string.isRequired,
+  currentVenue: venueType.isRequired,
   addPoints: func.isRequired,
   venues: venuesType.isRequired
 };

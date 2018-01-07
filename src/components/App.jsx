@@ -109,7 +109,7 @@ class App extends Component {
       content = (
         <InputForm
           addPoints={this.addPoints}
-          currentVenue={this.state.currentVenue.name}
+          currentVenue={this.state.currentVenue}
           venues={this.state.venues}
         />
       );
