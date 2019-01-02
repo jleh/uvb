@@ -13,6 +13,7 @@ function getPointsForVenue(userPoints, venue) {
 
   let str = userPoints[venue][0];
   let sum = userPoints[venue][0];
+
   for (let i = 1; i < userPoints[venue].length; i += 1) {
     str += userPoints[venue][i] < 0 ? ' ' : ' + ';
     str += userPoints[venue][i];

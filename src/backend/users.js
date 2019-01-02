@@ -56,11 +56,16 @@ const getScores = () => knex('points')
   .groupBy('userId', 'name')
   .orderBy('points', 'desc');
 
+const getVenues = () => knex('venues')
+  .select()
+  .where('year', 2018);
+
 module.exports = {
   getUserByFacebookId,
   getOrCreateUser,
   getUserById,
   addPoints,
   getUserPoints,
-  getScores
+  getScores,
+  getVenues
 };

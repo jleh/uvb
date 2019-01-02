@@ -3,6 +3,7 @@ const express = require('express');
 const passport = require('passport');
 const { Strategy } = require('passport-facebook');
 const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
 const { ensureLoggedIn } = require('connect-ensure-login');
 const bodyParser = require('body-parser');
 
@@ -13,6 +14,8 @@ const PORT = process.env.PORT || 3000;
 
 const FB_CALLBACK_LOCAL = process.env.FB_LOGIN_CALLBACK || 'http://localhost:3000/api/loginSuccess';
 const FB_CALLBACK_PRODUCTION = 'https://uvb18.herokuapp.com/api/loginSuccess';
+
+const redisStoreOptions = { url: process.env.REDIS_URL };
 
 passport.use(new Strategy({
   clientID: process.env.CLIENT_ID,
@@ -31,6 +34,7 @@ passport.deserializeUser(async (id, cb) => {
 });
 
 const sessionSettings = {
+  store: new RedisStore(redisStoreOptions),
   secret: 'vaasankatu',
   resave: true,
   saveUninitialized: true,
@@ -46,7 +50,6 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/', (req, res) => res.sendFile(path.resolve('dist/index.html')));
 app.get('/failure', (req, res) => res.sendFile(path.resolve('dist/failure.txt')));
-app.get('/api/venues', (req, res) => res.sendFile(path.resolve('data/venues.json')));
 app.get('/api/user', ensureLoggedIn(), (req, res) => res.send(req.user));
 app.get('/api/login', passport.authenticate('facebook'));
 
@@ -85,6 +88,8 @@ app.get('/api/scores', ensureLoggedIn(), async (req, res) => {
     res.sendStatus(500);
   }
 });
+
+app.get('/api/venues', (req, res) => users.getVenues().then(data => res.send(data)));
 
 app.listen(PORT, error => (
   error
