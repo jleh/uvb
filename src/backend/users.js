@@ -1,15 +1,13 @@
+const Knex = require('knex');
 const settings = require('./db/knexfile');
-const knex = require('knex')(process.env.NODE_ENV === 'production' ? settings.production : settings.development);
 
-function getUserByFacebookId(facebookId) {
-  return knex.select().from('users').where('facebookId', facebookId).first();
-}
+const knex = Knex(process.env.NODE_ENV === 'production' ? settings.production : settings.development);
 
-function getUserById(userId) {
-  return knex.select().from('users').where('id', userId).first();
-}
+const getUserByFacebookId = facebookId => knex.select().from('users').where('facebookId', facebookId).first();
 
-async function getOrCreateUser(facebookData) {
+const getUserById = userId => knex.select().from('users').where('id', userId).first();
+
+const getOrCreateUser = async (facebookData) => {
   const user = await getUserByFacebookId(facebookData.id);
 
   if (!user) {
@@ -22,14 +20,21 @@ async function getOrCreateUser(facebookData) {
   }
 
   return user.id;
-}
+};
 
-async function addPoints(userId, venue, points) {
-  return knex.insert({ userId, venue, points }).into('points');
-}
+const addPoints = async (userId, venue, points) => knex.insert({
+  userId,
+  venue,
+  points,
+  year: process.env.YEAR
+}).into('points');
 
-async function getUserPoints(userId) {
-  const pointData = await knex.select().from('points').where('userId', userId);
+const getUserPoints = async (userId) => {
+  const pointData = await knex.select()
+    .from('points')
+    .where('userId', userId)
+    .andWhere('year', process.env.YEAR);
+
   const points = {};
 
   pointData.forEach((data) => {
@@ -41,20 +46,21 @@ async function getUserPoints(userId) {
   });
 
   return points;
-}
+};
 
-async function getScores() {
-  return knex('points')
-    .join('users', 'users.id', '=', 'points.userId')
-    .select('users.name')
-    .sum('points as points')
-    .groupBy('userId', 'name')
-    .orderBy('points', 'desc');
-}
+const getScores = () => knex('points')
+  .join('users', 'users.id', '=', 'points.userId')
+  .select('users.name')
+  .where('year', process.env.YEAR)
+  .sum('points as points')
+  .groupBy('userId', 'name')
+  .orderBy('points', 'desc');
 
-module.exports.getUserByFacebookId = getUserByFacebookId;
-module.exports.getOrCreateUser = getOrCreateUser;
-module.exports.getUserById = getUserById;
-module.exports.addPoints = addPoints;
-module.exports.getUserPoints = getUserPoints;
-module.exports.getScores = getScores;
+module.exports = {
+  getUserByFacebookId,
+  getOrCreateUser,
+  getUserById,
+  addPoints,
+  getUserPoints,
+  getScores
+};
