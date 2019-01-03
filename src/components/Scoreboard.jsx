@@ -1,32 +1,40 @@
 import React from 'react';
 import { scoresType } from '../types';
 
-const getName = (user, names) => {
-  if (!user.name) {
-    return '';
-  }
+const getName = score => String(score.name).split(' ')[0];
+const getLastName = score => String(score.name).split(' ')[1].charAt(0);
 
-  const name = String(user.name).split(' ')[0];
+/* eslint-disable no-param-reassign */
+const findDuplicateNames = (scores) => {
+  const names = new Map();
 
-  if (names.get(name)) {
-    const lastName = String(user.name).split(' ')[1].charAt(0);
-    return `${name} ${lastName}`;
-  }
+  scores.forEach((score) => {
+    const name = getName(score);
 
-  names.set(name, true);
-  return name;
+    if (names.get(name) === false) {
+      scores
+        .filter(user => getName(user) === name)
+        .forEach((user) => { user.displayName = `${name} ${getLastName(user)}`; });
+
+      names.set(name, true);
+    } else if (names.get(name) === undefined) {
+      score.displayName = name;
+      names.set(name, false);
+    }
+  });
 };
+/* eslint-enable no-param-reassign */
 
 const Scoreboard = ({ scores }) => {
-  const names = new Map();
+  findDuplicateNames(scores);
 
   return (
     <div>
       <table className="pure-table pure-table-bordered scoreboard">
         <tbody>
           {scores.map(user => (
-            <tr key={user.name}>
-              <td>{getName(user, names)}</td>
+            <tr key={user.displayName}>
+              <td>{user.displayName}</td>
               <td>{user.points}</td>
             </tr>
           ))}

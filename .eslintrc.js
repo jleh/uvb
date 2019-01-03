@@ -12,6 +12,8 @@ module.exports = {
         "max-len": ["error", 120],
 
         // Has bug for custom propTypes
-        "react/no-typos": "off"
+        "react/no-typos": "off",
+
+        "react/jsx-one-expression-per-line": "off"
     }
 };
