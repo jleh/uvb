@@ -63,7 +63,7 @@ const getScores = () => knex('points')
 
 const getVenues = () => knex('venues')
   .select()
-  .where('year', 2018);
+  .where('year', process.env.YEAR);
 
 const runMigrations = async () => {
   await knex.migrate.latest();
