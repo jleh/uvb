@@ -3,6 +3,15 @@ import { func } from 'prop-types';
 import { venuesType } from '../types';
 
 import UserPointList from './UserPointList';
+import ConfirmPoints from './ConfirmPoints';
+
+const pointTypes = [
+  { text: 'Pullo (33 cl) keskiolutta tai siideriä', points: 2 },
+  { text: 'Lasi (12 cl) mietoa viiniä', points: 2 },
+  { text: 'Väkeviä (4 cl) ravintola-annos', points: 2 },
+  { text: '0,5 l tuoppi keskiolutta tai siideriä', points: 3 },
+  { text: '0,5 l tuoppi A-olutta tai vahvaa siideriä', points: 4 }
+];
 
 class InputForm extends Component {
   constructor(props) {
@@ -25,10 +34,11 @@ class InputForm extends Component {
     });
   }
 
-  addPoints(points) {
+  addPoints(pointType) {
     this.setState({
       modalOpen: true,
-      pointsToAdd: points,
+      pointsToAdd: pointType.points,
+      pointsText: pointType.text,
       venue: this.venueInput.value
     });
   }
@@ -52,6 +62,7 @@ class InputForm extends Component {
       disabled,
       modalOpen,
       pointsToAdd,
+      pointsText,
       venue,
       editorOpen
     } = this.state;
@@ -70,40 +81,28 @@ class InputForm extends Component {
           </select>
         </div>
         <div className="drinkButtons">
-          <button className="pure-button" onClick={() => this.addPoints(2)} type="button" disabled={disabled}>
-            Pullo (33 cl) keskiolutta tai siideriä <br /> 2 pistettä
-          </button>
-          <button className="pure-button" onClick={() => this.addPoints(2)} type="button" disabled={disabled}>
-            Lasi (12 cl) mietoa viiniä <br /> 2 pistettä
-          </button>
-          <button className="pure-button" onClick={() => this.addPoints(2)} type="button" disabled={disabled}>
-            Väkeviä (4 cl) ravintola-annos <br /> 2 pistettä
-          </button>
-          <button className="pure-button" onClick={() => this.addPoints(3)} type="button" disabled={disabled}>
-            0,5 l tuoppi keskiolutta tai siideriä <br /> 3 pistettä
-          </button>
-          <button className="pure-button" onClick={() => this.addPoints(4)} type="button" disabled={disabled}>
-            0,5 l tuoppi A-olutta tai vahvaa siideriä <br /> 4 pistettä
-          </button>
-          <button className="pure-button" onClick={() => this.addPoints(-1)} type="button" disabled={disabled}>
-            Väärä kirjaus <br /> -1 pistettä
-          </button>
+          {pointTypes.map(pointType => (
+            <button
+              className="pure-button"
+              onClick={() => this.addPoints(pointType)}
+              type="button"
+              disabled={disabled}
+            >
+              {pointType.text}
+              <br />
+              {pointType.points} pistettä
+            </button>
+          ))}
         </div>
 
         <div className={`modal ${modalOpen ? 'open' : 'closed'}`}>
-          <div className="modalContent">
-            <div>
-              Lisätäänkö {pointsToAdd} pistettä paikkaan <strong>{venue}</strong>
-            </div>
-            <div className="confirm-buttons">
-              <button type="button" className="pure-button pure-button-primary" onClick={() => this.confirmPoints()}>
-                Kyllä
-              </button>
-              <button type="button" className="pure-button" onClick={() => this.setState({ modalOpen: false })}>
-                Ei
-              </button>
-            </div>
-          </div>
+          <ConfirmPoints
+            pointsToAdd={pointsToAdd}
+            pointsText={pointsText}
+            venue={venue}
+            confirmPoints={() => this.confirmPoints()}
+            closeModal={() => this.setState({ modalOpen: false })}
+          />
         </div>
 
         {editorOpen && this.renderEditor()}
