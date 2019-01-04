@@ -30,21 +30,26 @@ function getTotalPoints(userPoints) {
 
 const PointCard = ({ currentVenue, venues, userPoints }) => (
   <div>
-    <table className="pointTable">
+    <table className="pure-table pure-table-bordered">
       <tbody>
         {venues.map(venue => (
           <tr
-            className="pointCardRow"
             key={venue.name}
+            className={currentVenue.name === venue.name ? 'current' : ''}
           >
-            <td className={currentVenue.name === venue.name ? 'pointCardName current' : 'pointCardName'}>
+            <td>{venue.time}</td>
+            <td>
               {venue.name}
             </td>
-            <td className="pointCardPoints">{getPointsForVenue(userPoints, venue.name)}</td>
+            <td className="pointCardPoints">
+              {getPointsForVenue(userPoints, venue.name)}
+            </td>
           </tr>
         ))}
         <tr className="totalRow">
-          <td>Yhteensä</td>
+          <td colSpan="2">
+            Yhteensä
+          </td>
           <td className="totalCell">{getTotalPoints(userPoints)}</td>
         </tr>
       </tbody>

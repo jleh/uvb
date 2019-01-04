@@ -14,6 +14,7 @@ module.exports = {
         // Has bug for custom propTypes
         "react/no-typos": "off",
 
-        "react/jsx-one-expression-per-line": "off"
+        "react/jsx-one-expression-per-line": "off",
+        "react/prop-types": "off"
     }
 };

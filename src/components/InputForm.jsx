@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import { func } from 'prop-types';
 import { venuesType } from '../types';
 
+import UserPointList from './UserPointList';
+
 class InputForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       modalOpen: false,
+      editorOpen: false,
       pointsToAdd: 0,
       venue: '',
       disabled: true
@@ -18,7 +21,7 @@ class InputForm extends Component {
 
   onChange = (e) => {
     this.setState({
-      disabled: e.target.value === '' || e.target.value === 'Valitse'
+      disabled: e.target.value === '' || e.target.value === 'Valitse baari'
     });
   }
 
@@ -38,12 +41,19 @@ class InputForm extends Component {
     this.setState({ modalOpen: false });
   }
 
+  renderEditor() {
+    const { userPoints } = this.props;
+
+    return <UserPointList userPoints={userPoints} />;
+  }
+
   render() {
     const {
       disabled,
       modalOpen,
       pointsToAdd,
-      venue
+      venue,
+      editorOpen
     } = this.state;
     const { venues } = this.props;
 
@@ -51,11 +61,11 @@ class InputForm extends Component {
       <div className="inputForm pure-form">
         <div>
           <select
-            className="pure-input-1"
+            className="pure-input-1 venue-select"
             onChange={this.onChange}
             ref={(input) => { this.venueInput = input; }}
           >
-            <option>Valitse</option>
+            <option>Valitse baari</option>
             {venues.map(({ name }) => <option key={name} value={name}>{name}</option>)}
           </select>
         </div>
@@ -79,6 +89,7 @@ class InputForm extends Component {
             Väärä kirjaus <br /> -1 pistettä
           </button>
         </div>
+
         <div className={`modal ${modalOpen ? 'open' : 'closed'}`}>
           <div className="modalContent">
             <div>
@@ -94,6 +105,8 @@ class InputForm extends Component {
             </div>
           </div>
         </div>
+
+        {editorOpen && this.renderEditor()}
       </div>
     );
   }

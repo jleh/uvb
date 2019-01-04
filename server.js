@@ -79,6 +79,16 @@ app.get('/api/points', ensureLoggedIn(), async (req, res) => {
   }
 });
 
+app.get('/api/pointsData', ensureLoggedIn(), async (req, res) => {
+  try {
+    const points = await users.getUserPointsWithData(req.user.id);
+    res.send(points);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
 app.get('/api/scores', ensureLoggedIn(), async (req, res) => {
   try {
     const scores = await users.getScores();

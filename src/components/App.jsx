@@ -7,6 +7,8 @@ import PointCard from './PointCard';
 import Scoreboard from './Scoreboard';
 import Menu from './Menu';
 
+import { getPointsWithData } from '../actions';
+
 import '../assets/stylesheets/base.scss';
 
 
@@ -20,7 +22,8 @@ class App extends Component {
       currentVenue: { name: '', time: '' },
       error: false,
       page: 'frontPage',
-      scores: []
+      scores: [],
+      userPointsWithData: []
     };
 
     this.setCurrentVenue = this.setCurrentVenue.bind(this);
@@ -82,6 +85,8 @@ class App extends Component {
     this.props.getPoints()
       .then(userPoints => this.setState({ userPoints }))
       .catch(() => this.setState({ error: true }));
+
+    getPointsWithData().then(userPointsWithData => this.setState({ userPointsWithData }));
   }
 
   render() {
@@ -108,7 +113,9 @@ class App extends Component {
         <InputForm
           addPoints={this.addPoints}
           currentVenue={this.state.currentVenue}
+          userPoints={this.state.userPoints}
           venues={this.state.venues}
+          userPoints={this.state.userPointsWithData}
         />
       );
     } else if (this.state.page === 'scoreboard') {
@@ -120,7 +127,7 @@ class App extends Component {
     return (
       <div className="container">
         {this.state.error ? <div className="error">Virhe, päivitä sivu ja yritä uudelleen.</div> : ''}
-        <h1>UVB 2018</h1>
+        <img alt="uvb 2019" src="uvb-header.jpeg" className="header-img" />
         <Menu changePage={page => this.setState({ page })} />
         {content}
       </div>

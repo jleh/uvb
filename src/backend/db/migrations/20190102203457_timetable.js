@@ -15,7 +15,7 @@ exports.up = async (knex) => {
   await knex('venues').insert({ name: 'Kallion B12', time: '19:30', year: 2019 });
   await knex('venues').insert({ name: 'Heinähattu', time: '20:00', year: 2019 });
   await knex('venues').insert({ name: 'Siima', time: '20:45', year: 2019 });
-  await knex('venues').insert({ name: 'Viva la Vida', time: '21:15', year: 2019 });
+  await knex('venues').insert({ name: 'Stindebinde', time: '21:15', year: 2019 });
   await knex('venues').insert({ name: 'Molotov', time: '21:45', year: 2019 });
 };
 

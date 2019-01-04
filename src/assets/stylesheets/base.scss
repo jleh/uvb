@@ -1,5 +1,9 @@
+$background-color: #027ab4;
+
 body {
   font-family: helvetica;
+  background: $background-color;
+  color: #fff;
 }
 
 h1 {
@@ -11,8 +15,9 @@ h1 {
   width: 10em;
 }
 
-.pointCardName.current {
+.current {
   font-weight: bold;
+  background-color: #18b4ff;
 }
 
 .modal.closed {
@@ -25,7 +30,7 @@ h1 {
 
 .modal {
   position: absolute;
-  background-color: #fff;
+  background-color: $background-color;
   width: 100%;
   top: 0;
   height: 100%;
@@ -100,4 +105,18 @@ h1 {
 
 .scoreboard {
   width: 100%;
+}
+
+.header-img {
+  margin-top: 1em;
+  max-width: 100%;
+  border: 1px solid #000;
+}
+
+.pure-menu-link {
+  color: #fff;
+}
+
+.venue-select {
+  color: #000;
 }

@@ -48,6 +48,11 @@ const getUserPoints = async (userId) => {
   return points;
 };
 
+const getUserPointsWithData = userId => knex.select()
+  .from('points')
+  .where('userId', userId)
+  .andWhere('year', process.env.YEAR);
+
 const getScores = () => knex('points')
   .join('users', 'users.id', '=', 'points.userId')
   .select('users.name')
@@ -67,5 +72,6 @@ module.exports = {
   addPoints,
   getUserPoints,
   getScores,
-  getVenues
+  getVenues,
+  getUserPointsWithData
 };
