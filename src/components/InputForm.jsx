@@ -10,7 +10,8 @@ const pointTypes = [
   { text: 'Lasi (12 cl) mietoa viiniä', points: 2 },
   { text: 'Väkeviä (4 cl) ravintola-annos', points: 2 },
   { text: '0,5 l tuoppi keskiolutta tai siideriä', points: 3 },
-  { text: '0,5 l tuoppi A-olutta tai vahvaa siideriä', points: 4 }
+  { text: '0,5 l tuoppi A-olutta tai vahvaa siideriä', points: 4 },
+  { text: 'Väärä kirjaus', points: -1 }
 ];
 
 class InputForm extends Component {

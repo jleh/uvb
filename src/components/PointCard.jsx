@@ -37,7 +37,7 @@ const PointCard = ({ currentVenue, venues, userPoints }) => (
             key={venue.name}
             className={currentVenue.name === venue.name ? 'current' : ''}
           >
-            <td>{venue.time}</td>
+            <td>{venue.time.replace(':', '.')}</td>
             <td>
               {venue.name}
             </td>
