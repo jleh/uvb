@@ -65,6 +65,10 @@ const getVenues = () => knex('venues')
   .select()
   .where('year', 2018);
 
+const runMigrations = async () => {
+  await knex.migrate.latest();
+};
+
 module.exports = {
   getUserByFacebookId,
   getOrCreateUser,
@@ -73,5 +77,6 @@ module.exports = {
   getUserPoints,
   getScores,
   getVenues,
-  getUserPointsWithData
+  getUserPointsWithData,
+  runMigrations
 };

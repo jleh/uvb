@@ -83,6 +83,7 @@ class InputForm extends Component {
         <div className="drinkButtons">
           {pointTypes.map(pointType => (
             <button
+              key={pointType.text}
               className="pure-button"
               onClick={() => this.addPoints(pointType)}
               type="button"

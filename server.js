@@ -9,6 +9,10 @@ const bodyParser = require('body-parser');
 
 const users = require('./src/backend/users');
 
+users.runMigrations()
+  .then(() => console.log('Migrations ready'))
+  .catch(e => console.log('Migrations error', e));
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
