@@ -6,12 +6,13 @@ const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const { ensureLoggedIn } = require('connect-ensure-login');
 const bodyParser = require('body-parser');
+const logger = require('./src/backend/logger');
 
 const users = require('./src/backend/users');
 
 users.runMigrations()
-  .then(() => console.log('Migrations ready'))
-  .catch(e => console.log('Migrations error', e));
+  .then(() => logger.log('info', 'Migrations ready'))
+  .catch(e => logger.log('info', 'Migrations error', e));
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -67,8 +68,9 @@ app.post('/api/points', ensureLoggedIn(), async (req, res) => {
   try {
     await users.addPoints(req.user.id, req.body.venue, req.body.points);
     res.sendStatus(200);
+    logger.log('info', 'Points saved', { user: req.user.id, venue: req.body.venue, points: req.body.points });
   } catch (err) {
-    console.log(err);
+    logger.log('error', err);
     res.sendStatus(500);
   }
 });
@@ -78,7 +80,7 @@ app.get('/api/points', ensureLoggedIn(), async (req, res) => {
     const points = await users.getUserPoints(req.user.id);
     res.send(points);
   } catch (err) {
-    console.log(err);
+    logger.log('error', err);
     res.sendStatus(500);
   }
 });
@@ -88,7 +90,7 @@ app.get('/api/pointsData', ensureLoggedIn(), async (req, res) => {
     const points = await users.getUserPointsWithData(req.user.id);
     res.send(points);
   } catch (err) {
-    console.log(err);
+    logger.log('error', err);
     res.sendStatus(500);
   }
 });
@@ -98,15 +100,17 @@ app.get('/api/scores', ensureLoggedIn(), async (req, res) => {
     const scores = await users.getScores();
     res.send(scores);
   } catch (err) {
-    console.log(err);
+    logger.log('error', err);
     res.sendStatus(500);
   }
 });
 
 app.get('/api/venues', (req, res) => users.getVenues().then(data => res.send(data)));
 
-app.listen(PORT, error => (
-  error
-    ? console.error(error)
-    : console.info(`Listening on port ${PORT}. Visit http://localhost:${PORT}/ in your browser.`)
-));
+app.listen(PORT, (error) => {
+  if (error) {
+    logger.log('error', error);
+  } else {
+    logger.log('info', `Listening on port ${PORT}. Visit http://localhost:${PORT}/ in your browser.`);
+  }
+});
