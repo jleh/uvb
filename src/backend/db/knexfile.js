@@ -1,12 +1,10 @@
 module.exports = {
 
   development: {
-    client: 'sqlite3',
-    connection: {
-      filename: './src/backend/db/dev.sqlite3'
-    },
-    useNullAsDefault: true,
+    client: 'pg',
+    connection: process.env.DATABASE_URL,
     migrations: {
+      tableName: 'knex_migrations',
       directory: './src/backend/db/migrations'
     }
   },

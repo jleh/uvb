@@ -6,3 +6,7 @@ services:
     command: redis-server
     ports:
       - 6379:6379
+  database:
+    image: 'postgres:alpine'
+    ports:
+      - 5432:5432

@@ -12,8 +12,6 @@ Built on top of [React + Node Starter for Heroku](https://github.com/alanbsmith/
 
 ## Incomplete todo list
 * Tests
-* Better UI design
-* Venues to Postgres
 * Admin view for schedule changes
 * View for last logged points
 * Use router for UI
@@ -28,9 +26,10 @@ CLIENT_SECRET
 ```
 
 ### Running development evn
-Create local database
+Create local database & redis containers
 ```
-npm run db:migrate
+cd docker
+docker-compose up
 ```
 Start both server and front with
 ```
