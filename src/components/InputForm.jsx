@@ -4,6 +4,7 @@ import { venuesType } from '../types';
 
 import UserPointList from './UserPointList';
 import ConfirmPoints from './ConfirmPoints';
+import DrinkButton from './DrinkButton';
 
 const pointTypes = [
   { text: 'Pullo (33 cl) keskiolutta tai siideriä', points: 2 },
@@ -83,17 +84,12 @@ class InputForm extends Component {
         </div>
         <div className="drinkButtons">
           {pointTypes.map(pointType => (
-            <button
+            <DrinkButton
               key={pointType.text}
-              className="pure-button"
-              onClick={() => this.addPoints(pointType)}
-              type="button"
               disabled={disabled}
-            >
-              {pointType.text}
-              <br />
-              {pointType.points} pistettä
-            </button>
+              addPoints={this.addPoints}
+              pointType={pointType}
+            />
           ))}
         </div>
 

@@ -25,6 +25,8 @@ CLIENT_ID
 CLIENT_SECRET
 ```
 
+Set `YEAR` for correct year, as app now supports multiple years (events).
+
 ### Running development evn
 Create local database & redis containers
 ```

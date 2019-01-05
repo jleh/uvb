@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
 import moment from 'moment';
 
 import InputForm from './InputForm';
@@ -7,7 +6,14 @@ import PointCard from './PointCard';
 import Scoreboard from './Scoreboard';
 import Menu from './Menu';
 
-import { getPointsWithData } from '../actions';
+import {
+  getPointsWithData,
+  getPoints,
+  getScores,
+  getUser,
+  getVenues,
+  updatePoints
+} from '../actions';
 
 import '../assets/stylesheets/base.scss';
 
@@ -32,7 +38,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.props.getVenues()
+    getVenues()
       .then((venues) => {
         this.setState({ venues });
         this.setCurrentVenue();
@@ -55,12 +61,12 @@ class App extends Component {
   }
 
   getScores() {
-    this.props.getScores().then(scores => this.setState({ scores }));
+    getScores().then(scores => this.setState({ scores }));
     setTimeout(this.getScores, 60000);
   }
 
   checkLogin() {
-    this.props.getUser()
+    getUser()
       .then(() => this.loggedIn())
       .catch(() => this.setState({ showLogin: true }));
 
@@ -73,7 +79,7 @@ class App extends Component {
 
   addPoints(venue, points) {
     this.setState({ page: 'frontPage' });
-    this.props.updatePoints(venue, points)
+    updatePoints(venue, points)
       .then(() => {
         this.updatePoints();
         this.getScores();
@@ -82,15 +88,52 @@ class App extends Component {
   }
 
   updatePoints() {
-    this.props.getPoints()
+    getPoints()
       .then(userPoints => this.setState({ userPoints }))
       .catch(() => this.setState({ error: true }));
 
     getPointsWithData().then(userPointsWithData => this.setState({ userPointsWithData }));
   }
 
+  renderContent() {
+    const {
+      page,
+      currentVenue,
+      userPoints,
+      venues,
+      userPointsWithData,
+      scores
+    } = this.state;
+
+    switch (page) {
+      case 'frontPage':
+        return (
+          <PointCard
+            currentVenue={currentVenue}
+            userPoints={userPoints}
+            venues={venues}
+          />
+        );
+      case 'addPoints':
+        return (
+          <InputForm
+            addPoints={this.addPoints}
+            currentVenue={currentVenue}
+            venues={venues}
+            userPoints={userPointsWithData}
+          />
+        );
+      case 'scoreboard':
+        return <Scoreboard scores={scores} />;
+      default:
+        return null;
+    }
+  }
+
   render() {
-    if (this.state.showLogin) {
+    const { showLogin, error } = this.state;
+
+    if (showLogin) {
       return (
         <div className="loginMessage">
           <a href="/api/login">Kirjaudu sisään Facebook -tunnuksillasi painamalla tästä</a>
@@ -98,49 +141,15 @@ class App extends Component {
       );
     }
 
-    let content = '';
-
-    if (this.state.page === 'frontPage') {
-      content = (
-        <PointCard
-          currentVenue={this.state.currentVenue}
-          userPoints={this.state.userPoints}
-          venues={this.state.venues}
-        />
-      );
-    } else if (this.state.page === 'addPoints') {
-      content = (
-        <InputForm
-          addPoints={this.addPoints}
-          currentVenue={this.state.currentVenue}
-          userPoints={this.state.userPoints}
-          venues={this.state.venues}
-          userPoints={this.state.userPointsWithData}
-        />
-      );
-    } else if (this.state.page === 'scoreboard') {
-      content = (
-        <Scoreboard scores={this.state.scores} />
-      );
-    }
-
     return (
       <div className="container">
-        {this.state.error ? <div className="error">Virhe, päivitä sivu ja yritä uudelleen.</div> : ''}
+        {error ? <div className="error">Virhe, päivitä sivu ja yritä uudelleen.</div> : ''}
         <img alt="uvb 2019" src="uvb-header.jpeg" className="header-img" />
-        <Menu changePage={page => this.setState({ page })} />
-        {content}
+        <Menu changePage={pageName => this.setState({ page: pageName })} />
+        {this.renderContent()}
       </div>
     );
   }
 }
-
-App.propTypes = {
-  getVenues: func.isRequired,
-  getScores: func.isRequired,
-  getUser: func.isRequired,
-  getPoints: func.isRequired,
-  updatePoints: func.isRequired
-};
 
 export default App;
