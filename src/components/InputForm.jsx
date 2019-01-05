@@ -7,6 +7,8 @@ import ConfirmPoints from './ConfirmPoints';
 import DrinkButton from './DrinkButton';
 
 const pointTypes = [
+  { text: 'Ykkösolut', points: 1 },
+  { text: 'Kakkosolut', points: 1.5 },
   { text: 'Pullo (33 cl) keskiolutta tai siideriä', points: 2 },
   { text: 'Lasi (12 cl) mietoa viiniä', points: 2 },
   { text: 'Väkeviä (4 cl) ravintola-annos', points: 2 },

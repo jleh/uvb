@@ -24,11 +24,15 @@ function getPointsForVenue(userPoints, venue) {
 }
 
 function getTotalPoints(userPoints) {
-  return Object.keys(userPoints)
-    .reduce((sum, name) => userPoints[name].reduce((v, s) => v + s, 0) + sum, 0);
+  return userPoints.reduce((sum, row) => sum + Number(row.points), 0);
 }
 
-const PointCard = ({ currentVenue, venues, userPoints }) => (
+const PointCard = ({
+  currentVenue,
+  venues,
+  userPoints,
+  userPointsWithData
+}) => (
   <div>
     <table className="pure-table pure-table-bordered">
       <tbody>
@@ -50,7 +54,7 @@ const PointCard = ({ currentVenue, venues, userPoints }) => (
           <td colSpan="2">
             Yhteensä
           </td>
-          <td className="totalCell">{getTotalPoints(userPoints)}</td>
+          <td className="totalCell">{getTotalPoints(userPointsWithData)}</td>
         </tr>
       </tbody>
     </table>

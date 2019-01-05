@@ -111,6 +111,7 @@ class App extends Component {
           <PointCard
             currentVenue={currentVenue}
             userPoints={userPoints}
+            userPointsWithData={userPointsWithData}
             venues={venues}
           />
         );
