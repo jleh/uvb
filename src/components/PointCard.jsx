@@ -8,16 +8,16 @@ function getPointsForVenue(userPoints, venue) {
   }
 
   if (userPoints[venue].length === 1) {
-    return userPoints[venue][0];
+    return Number(userPoints[venue][0]);
   }
 
-  let str = userPoints[venue][0];
-  let sum = userPoints[venue][0];
+  let str = Number(userPoints[venue][0]);
+  let sum = Number(userPoints[venue][0]);
 
   for (let i = 1; i < userPoints[venue].length; i += 1) {
-    str += userPoints[venue][i] < 0 ? ' ' : ' + ';
-    str += userPoints[venue][i];
-    sum += userPoints[venue][i];
+    str += Number(userPoints[venue][i]) < 0 ? ' ' : ' + ';
+    str += Number(userPoints[venue][i]);
+    sum += Number(userPoints[venue][i]);
   }
 
   return `${str} = ${sum}`;
