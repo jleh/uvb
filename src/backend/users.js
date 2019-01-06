@@ -1,4 +1,5 @@
 const Knex = require('knex');
+
 const settings = require('./db/knexfile');
 
 const knex = Knex(process.env.NODE_ENV === 'production' ? settings.production : settings.development);
@@ -65,6 +66,12 @@ const getVenues = () => knex('venues')
   .select()
   .where('year', process.env.YEAR);
 
+const getStatistics = year => knex('points')
+  .select('logged', 'venue', 'name', 'points')
+  .join('users', 'users.id', '=', 'points.userId')
+  .where('year', year)
+  .orderBy('logged', 'asc');
+
 const runMigrations = async () => {
   await knex.migrate.latest();
 };
@@ -78,5 +85,6 @@ module.exports = {
   getScores,
   getVenues,
   getUserPointsWithData,
+  getStatistics,
   runMigrations
 };

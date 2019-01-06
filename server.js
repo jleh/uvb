@@ -107,6 +107,9 @@ app.get('/api/scores', ensureLoggedIn(), async (req, res) => {
 
 app.get('/api/venues', (req, res) => users.getVenues().then(data => res.send(data)));
 
+app.get('/api/stats/:year', ensureLoggedIn(), (req, res) => users.getStatistics(req.params.year)
+  .then(data => res.send(data)));
+
 app.listen(PORT, (error) => {
   if (error) {
     logger.log('error', error);
