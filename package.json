@@ -4,7 +4,7 @@
   "description": "an example for deploying a React + NodeJS app to Heroku",
   "main": "server.js",
   "scripts": {
-    "build": "webpack --config webpack.prod.config.js",
+    "build": "webpack --mode production",
     "dev": "webpack-dev-server --hot --inline",
     "dev:server": "node -r dotenv/config server.js",
     "lint": "eslint src/**/*.js*",

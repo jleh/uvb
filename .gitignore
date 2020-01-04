@@ -2,6 +2,8 @@ node_modules/
 *npm-debug.log
 *.DS_Store
 dist/bundle.js
+dist/main.js
+dist/index.html
 coverage
 *.sqlite3
 .env
