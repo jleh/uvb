@@ -39,7 +39,7 @@ passport.deserializeUser(async (id, cb) => {
 });
 
 const sessionSettings = {
-  store: new RedisStore(redisStoreOptions),
+  // store: new RedisStore(redisStoreOptions),
   secret: 'vaasankatu',
   resave: true,
   saveUninitialized: true,

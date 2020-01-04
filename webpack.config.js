@@ -1,43 +1,46 @@
-const webpack = require('webpack');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 const path = require('path');
-// React v.16 uses some newer JS functionality, so to ensure everything
-// works across all browsers, we're adding babel-polyfill here.
-require('babel-polyfill');
 
 module.exports = {
-  entry: [
-    './src/index'
-  ],
-  module: {
-    loaders: [
-      { test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.js?$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.s?css$/, loader: 'style-loader!css-loader!sass-loader' },
-    ]
-  },
+  entry: './src/index.js',
   resolve: {
-    modules: [
-      path.resolve('./'),
-      path.resolve('./node_modules')
-    ],
-    extensions: ['.js', '.scss', '.jsx']
+    extensions: ['.js', '.jsx']
   },
-  output: {
-    path: path.join(__dirname, '/dist'),
-    publicPath: '/',
-    filename: 'bundle.js'
-  },
-  devtool: 'source-map',
   devServer: {
-    contentBase: './dist',
-    hot: true,
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 8081,
     proxy: {
-      '/api/**': 'http://localhost:3000'
+      '/api': 'http://localhost:3000'
     }
   },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader']
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader'
+        ]
+      }
+    ]
+  },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new HtmlWebPackPlugin({
+      template: 'src/index.html'
+    })
   ]
 };

@@ -34,7 +34,7 @@ const PointCard = ({
   userPointsWithData
 }) => (
   <div>
-    <table className="pure-table pure-table-bordered">
+    <table className="pure-table pure-table-bordered point-card">
       <tbody>
         {venues.map(venue => (
           <tr
