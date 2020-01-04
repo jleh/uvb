@@ -3,7 +3,6 @@ const express = require('express');
 const passport = require('passport');
 const { Strategy } = require('passport-facebook');
 const session = require('express-session');
-const RedisStore = require('connect-redis')(session);
 const { ensureLoggedIn } = require('connect-ensure-login');
 const bodyParser = require('body-parser');
 const logger = require('./src/backend/logger');
@@ -19,8 +18,6 @@ const PORT = process.env.PORT || 3000;
 
 const FB_CALLBACK_LOCAL = process.env.FB_LOGIN_CALLBACK || 'http://localhost:3000/api/loginSuccess';
 const FB_CALLBACK_PRODUCTION = 'https://uvb18.herokuapp.com/api/loginSuccess';
-
-const redisStoreOptions = { url: process.env.REDIS_URL };
 
 passport.use(new Strategy({
   clientID: process.env.CLIENT_ID,
@@ -39,7 +36,6 @@ passport.deserializeUser(async (id, cb) => {
 });
 
 const sessionSettings = {
-  // store: new RedisStore(redisStoreOptions),
   secret: 'vaasankatu',
   resave: true,
   saveUninitialized: true,

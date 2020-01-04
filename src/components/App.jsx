@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
+import { send } from '../notification';
+
 import InputForm from './InputForm';
 import PointCard from './PointCard';
 import Scoreboard from './Scoreboard';
@@ -46,6 +48,7 @@ class App extends Component {
 
     this.checkLogin();
     this.getScores();
+    this.notifyNextVenue();
   }
 
   setCurrentVenue() {
@@ -93,6 +96,20 @@ class App extends Component {
       .catch(() => this.setState({ error: true }));
 
     getPointsWithData().then(userPointsWithData => this.setState({ userPointsWithData }));
+  }
+
+  notifyNextVenue() {
+    setInterval(() => {
+      const venue = this.state.venues.find(venue => {
+        const diff = moment().diff(moment(venue.time, 'HH:mm'));
+        return diff > -3000 && diff < 0;
+      });
+
+      if (venue && !localStorage.get(`notified-${venue.name}`)) {
+        send(`${venue.name} ${venue.time}`);
+        localStorage.setItem(`notified-${venue.name}`, true);
+      }
+    }, 60000);
   }
 
   renderContent() {
