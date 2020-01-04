@@ -18,6 +18,7 @@ import {
 } from '../actions';
 
 import '../assets/stylesheets/base.scss';
+import Alcohol from './Alcohol';
 
 
 class App extends Component {
@@ -37,6 +38,8 @@ class App extends Component {
     this.setCurrentVenue = this.setCurrentVenue.bind(this);
     this.addPoints = this.addPoints.bind(this);
     this.getScores = this.getScores.bind(this);
+    this.checkLogin = this.checkLogin.bind(this);
+    this.notifyNextVenue = this.notifyNextVenue.bind(this);
   }
 
   componentDidMount() {
@@ -100,14 +103,16 @@ class App extends Component {
 
   notifyNextVenue() {
     setInterval(() => {
-      const venue = this.state.venues.find(venue => {
+      const FIVE_MINUTES = 5 * 60 * 1000;
+      const { venues } = this.state;
+      const nextVenue = venues.find((venue) => {
         const diff = moment().diff(moment(venue.time, 'HH:mm'));
-        return diff > -300000 && diff < 0;
+        return diff > -FIVE_MINUTES && diff < 0;
       });
 
-      if (venue && !localStorage.get(`notified-${venue.name}`)) {
-        send(`${venue.name} ${venue.time}`);
-        localStorage.setItem(`notified-${venue.name}`, true);
+      if (nextVenue && !localStorage.getItem(`notified-${nextVenue.name}`)) {
+        send(`${nextVenue.name} ${nextVenue.time}`);
+        localStorage.setItem(`notified-${nextVenue.name}`, true);
       }
     }, 60000);
   }
@@ -143,6 +148,8 @@ class App extends Component {
         );
       case 'scoreboard':
         return <Scoreboard scores={scores} />;
+      case 'alcohol':
+        return <Alcohol points={userPointsWithData} />;
       default:
         return null;
     }
@@ -162,7 +169,7 @@ class App extends Component {
     return (
       <div className="container">
         {error ? <div className="error">Virhe, päivitä sivu ja yritä uudelleen.</div> : ''}
-        <img alt="uvb 2019" src="uvb-header.jpeg" className="header-img" />
+        <img alt="uvb 2020" src="uvb-header.jpeg" className="header-img" />
         <Menu changePage={pageName => this.setState({ page: pageName })} />
         {this.renderContent()}
       </div>

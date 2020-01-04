@@ -31,6 +31,15 @@ const Menu = ({ changePage }) => (
           Yhteispisteet
         </a>
       </li>
+      <li className="pure-menu-item">
+        <a
+          className="pure-menu-link"
+          href="#addPoints"
+          onClick={() => changePage('alcohol')}
+        >
+          &#8240;
+        </a>
+      </li>
     </ul>
   </div>
 );

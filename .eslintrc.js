@@ -7,6 +7,7 @@ module.exports = {
         "jest": true
     },
     "rules": {
+        "arrow-parens": "off",
         "comma-dangle": ["warn", "never"],
         "react/jsx-filename-extension": "off",
         "max-len": ["error", 120],
