@@ -102,7 +102,7 @@ class App extends Component {
     setInterval(() => {
       const venue = this.state.venues.find(venue => {
         const diff = moment().diff(moment(venue.time, 'HH:mm'));
-        return diff > -3000 && diff < 0;
+        return diff > -300000 && diff < 0;
       });
 
       if (venue && !localStorage.get(`notified-${venue.name}`)) {
