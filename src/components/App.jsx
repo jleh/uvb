@@ -59,7 +59,7 @@ class App extends Component {
     const venues = this.state.venues.filter(venue => now.isAfter(moment(venue.time, 'HH:mm')));
     const currentVenue = venues[venues.length - 1] || { name: '', time: '' };
 
-    if (currentVenue !== this.state.currentVenue) {
+    if (currentVenue.name !== this.state.currentVenue.name) {
       this.setState({ currentVenue });
     }
 
@@ -157,6 +157,7 @@ class App extends Component {
 
   render() {
     const { showLogin, error } = this.state;
+    console.log('render');
 
     if (showLogin) {
       return (

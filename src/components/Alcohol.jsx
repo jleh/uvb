@@ -54,7 +54,7 @@ const Alcohol = ({ points }) => {
     <div>
       <button type="button" onClick={reset}>Aseta tiedot</button>
       <div className="permilles">
-        {permilles.toFixed(2)} &#8240;
+        {permilles < 0 ? 0 : permilles.toFixed(2)} &#8240;
       </div>
     </div>
   );
