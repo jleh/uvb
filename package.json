@@ -27,7 +27,7 @@
     "enzyme-adapter-react-16": "^1.7.1",
     "express": "^4.16.4",
     "express-session": "^1.17.1",
-    "knex": "^0.20.15",
+    "knex": "^2.4.0",
     "moment": "^2.23.0",
     "node-sass": "^7.0.0",
     "passport": "^0.4.0",
